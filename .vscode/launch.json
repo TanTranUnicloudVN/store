@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pos (local)",
+            "request": "launch",
+            "args": [
+                "--web-port=12356",
+                "--dart-define=ENVIRONMENT=LOCAL"
+            ],
+            "type": "dart"
+        },
+        {
+            "name": "pos (dev)",
+            "request": "launch",
+            "args": [
+                "--web-port=12356",
+                "--dart-define=ENVIRONMENT=DEV"
+            ],
+            "type": "dart"
+        },
+        {
+            "name": "pos (staging)",
+            "request": "launch",
+            "args": [
+                "--web-port=12356",
+                "--dart-define=ENVIRONMENT=STAGING"
+            ],
+            "type": "dart"
+        },
+        {
+            "name": "pos (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port=12356",
+                "--dart-define=ENVIRONMENT=DEV"
+            ],
+            "flutterMode": "release"
+        }
+    ]
+}
