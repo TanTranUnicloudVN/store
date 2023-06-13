@@ -74,7 +74,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   }
                 }
                 if (noti is SplashNotiHavePermission) {
-                  context.read<SplashCubit>().getApps();
+                  final isP12 = MediaQuery.of(context).size.height < 500;
+                  context.read<SplashCubit>().getApps(isP12);
                 }
                 if (noti is SplashNotiSuccess) {
                   Navigator.of(context).push(

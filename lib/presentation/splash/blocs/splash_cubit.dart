@@ -56,7 +56,7 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
     }
   }
 
-  Future<bool> getApps() async {
+  Future<bool> getApps(bool isP12) async {
     try {
       List<AppModel?> apps = [];
       final localAppsGotten = await perform(
@@ -79,10 +79,16 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
         }
       }
 
-      final serverApps = await perform(future: Repo().getApps()) ?? [];
+      var serverApps = await perform(future: Repo().getApps()) ?? [];
+      if (isP12) {
+        serverApps.removeWhere((element) {
+          return element?.name?.contains(" (P12)") == false;
+        });
+      }
+
       for (var element in serverApps) {
         final localApp = localAppsWithIcon.firstWhere((e) {
-          return e?.appName == element?.name &&
+          return e?.appName == element?.name?.replaceFirst(' (P12)', '') &&
               e?.packageName == element?.packageName;
         }, orElse: () => null);
         localAppsWithIcon.removeWhere((e) {
@@ -104,7 +110,7 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
 
         apps.add(
           AppModel(
-            name: element?.name,
+            name: localApp?.appName,
             packageName: element?.packageName,
             version: localApp?.versionName ?? element?.version,
             appStatus: status,
