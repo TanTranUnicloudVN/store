@@ -13,7 +13,6 @@ import 'package:api/src/model/response_base_object.dart';
 import 'package:api/src/model/response_base_page_response_app_store_info_response.dart';
 
 class AppStoreControllerInAppApi {
-
   final Dio _dio;
 
   final Serializers _serializers;
@@ -21,11 +20,11 @@ class AppStoreControllerInAppApi {
   const AppStoreControllerInAppApi(this._dio, this._serializers);
 
   /// Lấy danh sách app
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [xApiKey] 
-  /// * [id] 
+  /// * [xApiKey]
+  /// * [id]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -35,7 +34,7 @@ class AppStoreControllerInAppApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ResponseBaseAppStoreDetailResponse] as data
   /// Throws [DioError] if API call or serialization fails
-  Future<Response<ResponseBaseAppStoreDetailResponse>> getDetailApp({ 
+  Future<Response<ResponseBaseAppStoreDetailResponse>> getDetailApp({
     required String xApiKey,
     required String id,
     CancelToken? cancelToken,
@@ -45,7 +44,8 @@ class AppStoreControllerInAppApi {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _path = r'/api/appStoreDevice/v1/getDetailApp/{id}'.replaceAll('{' r'id' '}', id.toString());
+    final _path = r'/api/appStoreDevice/v1/getDetailApp/{id}'
+        .replaceAll('{' r'id' '}', id.toString());
     final _options = Options(
       method: r'GET',
       headers: <String, dynamic>{
@@ -75,7 +75,6 @@ class AppStoreControllerInAppApi {
         _response.data!,
         specifiedType: _responseType,
       ) as ResponseBaseAppStoreDetailResponse;
-
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,
@@ -99,15 +98,15 @@ class AppStoreControllerInAppApi {
   }
 
   /// Lấy danh sách app
-  /// 
+  ///
   ///
   /// Parameters:
-  /// * [xApiKey] 
-  /// * [keyword] 
-  /// * [page] 
-  /// * [pageSize] 
-  /// * [sortDirection] 
-  /// * [sortBy] 
+  /// * [xApiKey]
+  /// * [keyword]
+  /// * [page]
+  /// * [pageSize]
+  /// * [sortDirection]
+  /// * [sortBy]
   /// * [cancelToken] - A [CancelToken] that can be used to cancel the operation
   /// * [headers] - Can be used to add additional headers to the request
   /// * [extras] - Can be used to add flags to the request
@@ -117,7 +116,7 @@ class AppStoreControllerInAppApi {
   ///
   /// Returns a [Future] containing a [Response] with a [ResponseBasePageResponseAppStoreInfoResponse] as data
   /// Throws [DioError] if API call or serialization fails
-  Future<Response<ResponseBasePageResponseAppStoreInfoResponse>> getListApp({ 
+  Future<Response<ResponseBasePageResponseAppStoreInfoResponse>> getListApp({
     required String xApiKey,
     String? keyword,
     int? page,
@@ -146,11 +145,20 @@ class AppStoreControllerInAppApi {
     );
 
     final _queryParameters = <String, dynamic>{
-      if (keyword != null) r'keyword': encodeQueryParameter(_serializers, keyword, const FullType(String)),
-      if (page != null) r'page': encodeQueryParameter(_serializers, page, const FullType(int)),
-      if (pageSize != null) r'pageSize': encodeQueryParameter(_serializers, pageSize, const FullType(int)),
-      if (sortDirection != null) r'sortDirection': encodeQueryParameter(_serializers, sortDirection, const FullType(String)),
-      if (sortBy != null) r'sortBy': encodeQueryParameter(_serializers, sortBy, const FullType(String)),
+      if (keyword != null)
+        r'keyword':
+            encodeQueryParameter(_serializers, keyword, const FullType(String)),
+      if (page != null)
+        r'page': encodeQueryParameter(_serializers, page, const FullType(int)),
+      if (pageSize != null)
+        r'pageSize':
+            encodeQueryParameter(_serializers, pageSize, const FullType(int)),
+      if (sortDirection != null)
+        r'sortDirection': encodeQueryParameter(
+            _serializers, sortDirection, const FullType(String)),
+      if (sortBy != null)
+        r'sortBy':
+            encodeQueryParameter(_serializers, sortBy, const FullType(String)),
     };
 
     final _response = await _dio.request<Object>(
@@ -165,12 +173,12 @@ class AppStoreControllerInAppApi {
     ResponseBasePageResponseAppStoreInfoResponse _responseData;
 
     try {
-      const _responseType = FullType(ResponseBasePageResponseAppStoreInfoResponse);
+      const _responseType =
+          FullType(ResponseBasePageResponseAppStoreInfoResponse);
       _responseData = _serializers.deserialize(
         _response.data!,
         specifiedType: _responseType,
       ) as ResponseBasePageResponseAppStoreInfoResponse;
-
     } catch (error, stackTrace) {
       throw DioError(
         requestOptions: _response.requestOptions,
@@ -192,5 +200,4 @@ class AppStoreControllerInAppApi {
       extra: _response.extra,
     );
   }
-
 }

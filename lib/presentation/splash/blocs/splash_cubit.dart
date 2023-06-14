@@ -80,11 +80,18 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
       }
 
       var serverApps = await perform(future: Repo().getApps()) ?? [];
+      print(serverApps);
       if (isP12) {
         serverApps.removeWhere((element) {
           return element?.name?.contains(" (P12)") == false;
         });
+      } else {
+        serverApps.removeWhere((element) {
+          return element?.name?.contains(" (P12)") == true;
+        });
       }
+
+      print(serverApps);
 
       for (var element in serverApps) {
         final localApp = localAppsWithIcon.firstWhere((e) {
@@ -110,11 +117,11 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
 
         apps.add(
           AppModel(
-            name: localApp?.appName,
+            name: element?.name?.replaceFirst(' (P12)', ''),
             packageName: element?.packageName,
             version: localApp?.versionName ?? element?.version,
             appStatus: status,
-            icon: element?.icon,
+            icon: element?.icon ?? localApp?.icon,
             downloadUrl: element?.downloadUrl,
           ),
         );
@@ -152,7 +159,8 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
         orElse: () => null,
       );
       final app =
-          await performWithLoading(future: DeviceApps.getApp(packageName));
+          await performWithLoading(future: DeviceApps.getApp(packageName, true))
+              as ApplicationWithIcon?;
       if (app == null && currentApp?.appStatus == AppStatus.notAllowed) {
         var tempApps = state.apps;
         tempApps?.removeWhere((element) {
@@ -171,6 +179,7 @@ class SplashCubit extends LoadablePerformerCubit<SplashState>
             name: app.appName,
             packageName: app.packageName,
             version: app.versionName,
+            icon: app.icon,
             appStatus: AppStatus.installed,
           ),
         );

@@ -31,8 +31,9 @@ dependencies:
   # path_provider: ^2.0.15
   filesize: ^2.0.1
   percent_indicator: ^4.2.3
-  app_installer: ^1.1.0
+  # app_installer: ^1.1.0
   openapi_generator_annotations: ^4.10.0
+  open_filex: ^4.3.2
 
 dev_dependencies:
   flutter_test:

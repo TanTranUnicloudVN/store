@@ -107,9 +107,13 @@ class DioFileService {
   download() async {
     onGetFileName(null);
     onPercentChange(0);
-
-    await getItemFileWithProgress(
-        fileUrl: fileUrl, fileLocalRouteStr: fileLocalRouteStr);
+    try {
+      await getItemFileWithProgress(
+          fileUrl: fileUrl, fileLocalRouteStr: fileLocalRouteStr);
+    } catch (e, t) {
+      print(e);
+      print(t);
+    }
   }
 
   Future<File?> getItemFileWithProgress({

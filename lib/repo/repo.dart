@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:api/api.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:store/environment.dart';
 import 'package:store/model/app_model.dart';
@@ -11,17 +12,28 @@ class Repo {
   Future<List<AppModel?>?> getApps() async {
     List<AppModel?> listApps = [];
     try {
-      final response = await Api().getAppStoreControllerInAppApi().getListApp(
-            xApiKey: Environment().config?.publicKey ?? "",
+      final response = await Api(
+        dio: Dio(
+          BaseOptions(
+            baseUrl: Environment().config!.clientUrl,
+            sendTimeout: const Duration(seconds: 10),
+            connectTimeout: const Duration(seconds: 30),
+            receiveTimeout: const Duration(seconds: 30),
+          ),
+        ),
+      ).getAppStoreControllerInAppApi().getListApp(
+            xApiKey: "236977ED0A5D231C513701DA2B76EE56",
           );
       final data = response.data?.data;
+      print(data);
       if (data != null) {
         final listItems = data.items?.toList() ?? [];
         for (var element in listItems) {
           String path = "${Environment().config!.clientUrl}${element.urlLogo}";
           log(path);
-          final http.Response responseData = await http.get(Uri.parse(path),
-              headers: {'x-api-key': Environment().config!.publicKey});
+          final http.Response responseData = await http.get(
+            Uri.parse(path),
+          );
           final Uint8List uint8list = responseData.bodyBytes;
           final downloadApkUrl =
               "${Environment().config!.clientUrl}${element.url}";

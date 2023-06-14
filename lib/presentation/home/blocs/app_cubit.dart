@@ -1,9 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:app_installer/app_installer.dart';
+// import 'package:app_installer/app_installer.dart';
 import 'package:bloc_notification/bloc_notification.dart';
 import 'package:device_apps/device_apps.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:store/environment.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:store/presentation/home/blocs/app_noti.dart';
@@ -19,10 +20,20 @@ class AppProgressCubit extends LoadablePerformerCubit<AppProgressState>
   });
 
   Future download(String url) async {
-    final file = File("${Environment().config!.saveLocalDataPath}/app.apk");
-    if (file.existsSync()) {
-      file.deleteSync(recursive: true);
+    try {
+      final file = File("${Environment().config!.saveLocalDataPath}/app.apk");
+      final isLived = await file.exists().timeout(
+            const Duration(
+              milliseconds: 300,
+            ),
+          );
+      if (isLived) {
+        file.deleteSync(recursive: true);
+      }
+    } catch (e, t) {
+      print("download Error $e , $t");
     }
+
     if (!url.contains(".apk")) {
       log("FAIL - MISSING APK");
       notify(const AppNotiInstallFailed());
@@ -55,8 +66,9 @@ class AppProgressCubit extends LoadablePerformerCubit<AppProgressState>
 
   Future installApp(String domain) async {
     emit(state.copyWith(apkName: ''));
-    await AppInstaller.installApk(
-        "${Environment().config!.saveLocalDataPath}/app.apk");
+    // await AppInstaller.installApk(
+    //     "${Environment().config!.saveLocalDataPath}/app.apk");
+    await OpenFilex.open("${Environment().config!.saveLocalDataPath}/app.apk");
 
     await DeviceApps.isAppInstalled(domain);
   }
